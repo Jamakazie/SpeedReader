@@ -7,6 +7,6 @@ var parent = chrome.contextMenus.create(
 
 		});
 
-function SpeedRead(){
-	alert('hello');
+function SpeedRead(menuItemId){
+	console.log(menuItemId);
 }
