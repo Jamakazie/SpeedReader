@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+
+	"name" : "jSpeed Reader",
+	"description" : "Speed read: reading fast and cutomizing to fit your needs",
+	"version": "1.0",
+
+	"permissions": [
+		"contextMenus"
+	],
+
+	"icons":{
+		"16": "icon16.png"
+	},
+	"background":{
+		"scripts": ["sr.js"]
+	}
+
+}
