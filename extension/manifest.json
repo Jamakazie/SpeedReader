@@ -12,8 +12,14 @@
 	"icons":{
 		"16": "icon16.png"
 	},
-	"background":{
-		"scripts": ["sr.js"]
+	
+	"content_scripts": [
+		{
+		"matches": ["http://*/*"],
+		"js": ["speedread.js"]
+		}
+	],
+	"background": {
+		"scripts": ["context.js"]
 	}
-
 }
