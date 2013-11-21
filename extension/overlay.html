@@ -1,18 +1,26 @@
 <style type="text/css">
+	body{
+		background-color: orange;
+	}
 
 	#overlay{
 		height: 288px;
-		color: white;
+		background-color: rgba(255, 255, 255, 0.5);
 		width: 100%;
-		opacity: 0.5;
 	}
 	#main{
 		width: 512px;
 		margin: 0 auto;
 		height: 100%;
+		color: black;
+		background-color: rgba(255, 255, 182 0.3 !important);
 	}
 </style>
 <div id="overlay">
-	<div id="main"></div>
+	<div id="main">
+		<div id="exit-button">[x]</div>
+		<div id="current-word">WORD</div>
+		<div id="control-button">Play</div>
+		<div id="word-rate">over 900 words at 5000000 wpm</div>
+	</div>
 </div>
-
