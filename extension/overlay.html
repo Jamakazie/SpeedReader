@@ -13,14 +13,75 @@
 		margin: 0 auto;
 		height: 100%;
 		color: black;
-		background-color: rgba(255, 255, 182 0.3 !important);
+		background-color: rgba(255, 255, 182, 0.3 ) !important;
+	}
+	#exit-button{
+		float: right;
+		cursor: pointer;
+		padding: 8px 8px 0 0;
+	}
+	#current-word{
+		height: 128px;
+		line-height: 128px;
+		width: 256px;
+		text-align: center;
+		margin: 0 auto;
+		padding-top: 32px;
+		vertical-align: middle;
+	}
+	span.center-word{
+		display: inline-block;
+		vertical-align: middle;
+	}
+	#control-button{
+		width: 64px;
+		height: 32px;
+		margin: 0 auto;
+		text-align: center;
+		cursor: pointer;
+	}
+	.button{
+		display: inline-block;
+		padding: 6px 12px;
+		margin-bottom 0;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 1.42;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: middle;
+		cursor: pointer;
+		background-image: none;
+		border: 1px solid transparent;
+		border-radius: 4px;
+		color: #fff;
+		background-color: #428bca;
+		background-color: #357edb;
+	}
+	#pause{
+		display: none;
+	}
+	#wordcount, #words-per-minute{
+		display: inline-block;
+	}
+	#word-rate{
+		padding-top: 32px;
+		width: 384px;
+		text-align: center;
+		margin: 0 auto;
 	}
 </style>
 <div id="overlay">
 	<div id="main">
 		<div id="exit-button">[x]</div>
-		<div id="current-word">WORD</div>
-		<div id="control-button">Play</div>
-		<div id="word-rate">over 900 words at 5000000 wpm</div>
+		<div id="current-word"></div>
+		<div id="control-button">
+			<button class="button" id="play">Play</button>
+			<button class="button" id="pause">Pause</button>
+		</div>
+		<div id="word-rate">
+			<div id="wordcount">500</div> words at
+			<div id="words-per-minute">500</div> words/minute
+		</div>
 	</div>
 </div>
