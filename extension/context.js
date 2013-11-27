@@ -1,12 +1,5 @@
 // javascript that will assist with speed reading
 
-var parent = chrome.contextMenus.create(
-		{
-			"title":"Speed read now!",
-    			"onclick": SpeedRead
-
-		});
-
 var selection = chrome.contextMenus.create(
 		{
 			"title": "Speedread",

@@ -2,7 +2,7 @@ var speedReadGlobals = {
 	index: -1,
 	words: null,
 	isPlaying: false,
-	wordsPerMinute: 500
+	wordsPerMinute: 700
 };
 chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse){
@@ -16,19 +16,15 @@ function SpeedRead(context){
 	var html = 
 		['<div id="speedread-overlay">',
 		'	<style type="text/css">',
-		'		body{',
-		'			background-color: orange;',
-		'		}',
-		'',
 		'		#speedread-overlay{',
 		'			left: 0;',
 		'			right: 0;',
 		'			z-index: 9001;',
-		'			height: 288px;',
+		'			height: 350px;',
 		'			background-color: rgba(0, 0, 0, .5);',
 		'			width: 100%;',
 		'			position: fixed;',
-		'			margin: 20% auto;',
+		'			margin: 10% auto;',
 		'		}',
 		'		#speedread-main{',
 		'			width: 512px;',
@@ -44,9 +40,10 @@ function SpeedRead(context){
 		'			padding: 8px 8px 0 0;',
 		'		}',
 		'		#speedread-current-word{',
+		'			font-weight: 500;',
 		'			height: 128px;',
 		'			width: 256px;',
-		'			font-size: 3em;',
+		'			font-size: 4em;',
 		'			text-align: center;',
 		'			margin: 0 auto;',
 		'			padding-top: 80px;',
@@ -59,7 +56,7 @@ function SpeedRead(context){
 		'		#speedread-control-button{',
 		'			width: 64px;',
 		'			height: 32px;',
-		'			margin: 64px auto 0 auto;',
+		'			margin: 96px auto 0 auto;',
 		'			text-align: center;',
 		'			cursor: pointer;',
 		'		}',
@@ -77,7 +74,7 @@ function SpeedRead(context){
 		'			background-image: none;',
 		'			border: 1px solid transparent;',
 		'			border-radius: 4px;',
-		'			color: #speedread-fff;',
+		'			color: #fff;',
 		'			background-color: #428bca;',
 		'			background-color: #357edb;',
 		'		}',
@@ -92,6 +89,7 @@ function SpeedRead(context){
 		'			width: 384px;',
 		'			text-align: center;',
 		'			margin: 0 auto;',
+		'			font-size: 1.2em;',
 		'		}',
 		'	</style>',
 		'',
@@ -109,11 +107,11 @@ function SpeedRead(context){
 		'		</div>',
 		'	</div>',
 		'</div>'].join("\n");
-	speedReadGlobals.words = context.info.selectionText.split(" ");
+	var splitregex = /[\s\u2013\u2014-]/
+	speedReadGlobals.words = context.info.selectionText.split(splitregex);
 	document.getElementsByTagName("body")[0].innerHTML = html + document.getElementsByTagName("body")[0].innerHTML;
 	document.getElementById('speedread-current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
-	document.getElementById('speedread-exit-button').onclick = closeSR;
-
+	document.getElementById('speedread-wordcount').innerHTML = speedReadGlobals.words.length;
 	Listeners();
 }
 
@@ -124,6 +122,8 @@ function Listeners(){
 	document.getElementById(playButtonID).onclick = play;
 	document.getElementById(pauseButtonID).onclick = pause;
 	document.getElementById(replayButonID).onclick = replay;
+	document.getElementById('speedread-exit-button').onclick = closeSR;
+	document.getElementById('speedread-words-per-minute').onclick = function(){console.log('pewpew');};
 }
 
 // Functions for playing/pausing text
