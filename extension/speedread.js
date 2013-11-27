@@ -14,119 +14,164 @@ chrome.runtime.onMessage.addListener(
 
 function SpeedRead(context){
 	var html = 
-		['<style type="text/css">',
-		'	body{',
-		'		background-color: orange;',
-		'	}',
+		['<div id="speedread-overlay">',
+		'	<style type="text/css">',
+		'		body{',
+		'			background-color: orange;',
+		'		}',
 		'',
-		'	#overlay{',
-		'		height: 288px;',
-		'		background-color: rgba(255, 255, 255, 0.5);',
-		'		width: 100%;',
-		'	}',
-		'	#main{',
-		'		width: 512px;',
-		'		margin: 0 auto;',
-		'		height: 100%;',
-		'		color: black;',
-		'		background-color: rgba(255, 255, 182, 0.3 ) !important;',
-		'	}',
-		'	#exit-button{',
-		'		float: right;',
-		'		cursor: pointer;',
-		'		padding: 8px 8px 0 0;',
-		'	}',
-		'	#current-word{',
-		'		height: 128px;',
-		'		width: 256px;',
-		'		font-size: 3em;',
-		'		text-align: center;',
-		'		margin: 0 auto;',
-		'		padding-top: 32px;',
-		'		vertical-align: middle;',
-		'	}',
-		'	span.center-word{',
-		'		display: inline-block;',
-		'		vertical-align: middle;',
-		'	}',
-		'	#control-button{',
-		'		width: 64px;',
-		'		height: 32px;',
-		'		margin: 64px auto 0 auto;',
-		'		text-align: center;',
-		'		cursor: pointer;',
-		'	}',
-		'	.button{',
-		'		display: inline-block;',
-		'		padding: 6px 12px;',
-		'		margin-bottom 0;',
-		'		font-size: 14px;',
-		'		font-weight: normal;',
-		'		line-height: 1.42;',
-		'		text-align: center;',
-		'		white-space: nowrap;',
-		'		vertical-align: middle;',
-		'		cursor: pointer;',
-		'		background-image: none;',
-		'		border: 1px solid transparent;',
-		'		border-radius: 4px;',
-		'		color: #fff;',
-		'		background-color: #428bca;',
-		'		background-color: #357edb;',
-		'	}',
-		'	#pause{',
-		'		display: none;',
-		'	}',
-		'	#wordcount, #words-per-minute{',
-		'		display: inline-block;',
-		'	}',
-		'	#word-rate{',
-		'		padding-top: 32px;',
-		'		width: 384px;',
-		'		text-align: center;',
-		'		margin: 0 auto;',
-		'	}',
-		'</style>',
-		'<div id="overlay">',
-		'	<div id="main">',
-		'		<div id="exit-button">[x]</div>',
-		'		<div id="current-word"></div>',
-		'		<div id="control-button">',
-		'			<button class="button" id="play">Play</button>',
-		'			<button class="button" id="pause">Pause</button>',
+		'		#speedread-overlay{',
+		'			left: 0;',
+		'			right: 0;',
+		'			z-index: 9001;',
+		'			height: 288px;',
+		'			background-color: rgba(0, 0, 0, .5);',
+		'			width: 100%;',
+		'			position: fixed;',
+		'			margin: 20% auto;',
+		'		}',
+		'		#speedread-main{',
+		'			width: 512px;',
+		'			margin: 0 auto;',
+		'			height: 100%;',
+		'			color: black;',
+		'			background-color: rgba(255, 255, 255, .9 ) !important;',
+		'			border: black 1px solid;',
+		'		}',
+		'		#speedread-exit-button{',
+		'			float: right;',
+		'			cursor: pointer;',
+		'			padding: 8px 8px 0 0;',
+		'		}',
+		'		#speedread-current-word{',
+		'			height: 128px;',
+		'			width: 256px;',
+		'			font-size: 3em;',
+		'			text-align: center;',
+		'			margin: 0 auto;',
+		'			padding-top: 80px;',
+		'			vertical-align: middle;',
+		'		}',
+		'		span.speedread-center-word{',
+		'			display: inline-block;',
+		'			vertical-align: middle;',
+		'		}',
+		'		#speedread-control-button{',
+		'			width: 64px;',
+		'			height: 32px;',
+		'			margin: 64px auto 0 auto;',
+		'			text-align: center;',
+		'			cursor: pointer;',
+		'		}',
+		'		.speedread-button{',
+		'			display: inline-block;',
+		'			padding: 6px 12px;',
+		'			margin-bottom 0;',
+		'			font-size: 14px;',
+		'			font-weight: normal;',
+		'			line-height: 1.42;',
+		'			text-align: center;',
+		'			white-space: nowrap;',
+		'			vertical-align: middle;',
+		'			cursor: pointer;',
+		'			background-image: none;',
+		'			border: 1px solid transparent;',
+		'			border-radius: 4px;',
+		'			color: #speedread-fff;',
+		'			background-color: #428bca;',
+		'			background-color: #357edb;',
+		'		}',
+		'		#speedread-pause, #speedread-replay{',
+		'			display: none;',
+		'		}',
+		'		#speedread-wordcount, #speedread-words-per-minute{',
+		'			display: inline-block;',
+		'		}',
+		'		#speedread-word-rate{',
+		'			padding-top: 32px;',
+		'			width: 384px;',
+		'			text-align: center;',
+		'			margin: 0 auto;',
+		'		}',
+		'	</style>',
+		'',
+		'	<div id="speedread-main">',
+		'		<div id="speedread-exit-button">[x]</div>',
+		'		<div id="speedread-current-word"></div>',
+		'		<div id="speedread-control-button">',
+		'			<button class="speedread-button" id="speedread-play">Play</button>',
+		'			<button class="speedread-button" id="speedread-pause">Pause</button>',
+		'			<button class="speedread-button" id="speedread-replay">Replay</button>',
 		'		</div>',
-		'		<div id="word-rate">',
-		'			<div id="wordcount">500</div> words at',
-		'			<div id="words-per-minute">500</div> words/minute',
+		'		<div id="speedread-word-rate">',
+		'			<div id="speedread-wordcount">500</div> words at',
+		'			<div id="speedread-words-per-minute">500</div> words/minute',
 		'		</div>',
 		'	</div>',
 		'</div>'].join("\n");
 	speedReadGlobals.words = context.info.selectionText.split(" ");
-	document.getElementsByTagName("body")[0].innerHTML = html;
-	document.getElementById('current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
-	playListener();
+	document.getElementsByTagName("body")[0].innerHTML = html + document.getElementsByTagName("body")[0].innerHTML;
+	document.getElementById('speedread-current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
+	document.getElementById('speedread-exit-button').onclick = closeSR;
+
+	Listeners();
 }
 
-function playListener(){
-	var playButtonID = 'play';
+function Listeners(){
+	var playButtonID = 'speedread-play';
+	var pauseButtonID = 'speedread-pause';
+	var replayButonID = 'speedread-replay';
 	document.getElementById(playButtonID).onclick = play;
+	document.getElementById(pauseButtonID).onclick = pause;
+	document.getElementById(replayButonID).onclick = replay;
 }
 
 // Functions for playing/pausing text
 
 function play(){
 	speedReadGlobals.isPlaying = true;
+	toggleVisability('speedread-pause');
 	setTimeout(incrementWord, minsToMillis());
+}
+
+function pause(){
+	speedReadGlobals.isPlaying = false;
+	toggleVisability('speedread-play');
+}
+
+function replay(){
+	speedReadGlobals.index = -1;
+	play();
+}
+
+function toggleVisability(showElement){
+	var buttons = document.getElementsByClassName("speedread-button");
+	for(var i = buttons.length - 1; i >= 0; i--){
+		buttons[i].style.display = 'none';
+	}
+	document.getElementById(showElement).style.display = 'block';
 }
 
 function incrementWord(){
 	if(!speedReadGlobals.isPlaying){
 		return;
 	}
-	document.getElementById('current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
+	document.getElementById('speedread-current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
+	if(speedReadGlobals.words.length ===  (speedReadGlobals.index + 1)){
+		speedReadGlobals.isPlaying = false;
+		toggleVisability("speedread-replay");
+	}
 	setTimeout(incrementWord, minsToMillis());
 }
 
 function minsToMillis(){
 	return (60000 / speedReadGlobals.wordsPerMinute);
+}
+
+function closeSR(){
+	var elem = document.getElementById('speedread-overlay');
+	speedReadGlobals.index = -1;
+	speedReadGlobals.word = null;
+	speedReadGlobals.isPlaying = false;
+	elem.parentNode.removeChild(elem);
 }
