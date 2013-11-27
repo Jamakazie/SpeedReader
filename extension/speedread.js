@@ -1,3 +1,9 @@
+var speedReadGlobals = {
+	index: -1,
+	words: null,
+	isPlaying: false,
+	wordsPerMinute: 500
+};
 chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse){
 			if(true){ // I guess we should check if it's actually from it?
@@ -32,8 +38,8 @@ function SpeedRead(context){
 		'	}',
 		'	#current-word{',
 		'		height: 128px;',
-		'		line-height: 128px;',
 		'		width: 256px;',
+		'		font-size: 3em;',
 		'		text-align: center;',
 		'		margin: 0 auto;',
 		'		padding-top: 32px;',
@@ -46,7 +52,7 @@ function SpeedRead(context){
 		'	#control-button{',
 		'		width: 64px;',
 		'		height: 32px;',
-		'		margin: 0 auto;',
+		'		margin: 64px auto 0 auto;',
 		'		text-align: center;',
 		'		cursor: pointer;',
 		'	}',
@@ -95,9 +101,32 @@ function SpeedRead(context){
 		'		</div>',
 		'	</div>',
 		'</div>'].join("\n");
-	console.log(context.info.selectionText);
-	window.words = context.info.selectionText.split(" ");
+	speedReadGlobals.words = context.info.selectionText.split(" ");
 	document.getElementsByTagName("body")[0].innerHTML = html;
-	document.getElementById("current-word").innerHTML = context.info.selectionText;
-	console.log(context);
+	document.getElementById('current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
+	playListener();
+}
+
+function playListener(){
+	var playButtonID = 'play';
+	document.getElementById(playButtonID).onclick = play;
+}
+
+// Functions for playing/pausing text
+
+function play(){
+	speedReadGlobals.isPlaying = true;
+	setTimeout(incrementWord, minsToMillis());
+}
+
+function incrementWord(){
+	if(!speedReadGlobals.isPlaying){
+		return;
+	}
+	document.getElementById('current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
+	setTimeout(incrementWord, minsToMillis());
+}
+
+function minsToMillis(){
+	return (60000 / speedReadGlobals.wordsPerMinute);
 }
