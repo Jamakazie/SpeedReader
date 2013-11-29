@@ -2,7 +2,9 @@ var speedReadGlobals = {
 	index: -1,
 	words: null,
 	isPlaying: false,
-	wordsPerMinute: 700
+	wordsPerMinute: 700,
+	eventBubble: null
+
 };
 chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse){
@@ -127,28 +129,31 @@ function Listeners(){
 	var playButtonID = 'speedread-play';
 	var pauseButtonID = 'speedread-pause';
 	var replayButonID = 'speedread-replay';
-	document.getElementById(playButtonID).onclick = play;
-	document.getElementById(pauseButtonID).onclick = pause;
-	document.getElementById(replayButonID).onclick = replay;
-	document.getElementById('speedread-exit-button').onclick = closeSR;
+	document.getElementById(playButtonID).addEventListener("click", play);
+	document.getElementById(pauseButtonID).addEventListener("click", pause);
+	document.getElementById(replayButonID).addEventListener("click", replay);
+	document.getElementById('speedread-exit-button').addEventListener("click",  closeSR);
 	document.getElementById('speedread-words-per-minute').onclick = function(){console.log('pewpew');};
-	document.getElementById('speedread-background').onclick = closeSR;
+	document.getElementById('speedread-background').addEventListener("click",  closeSR, false);
 }
 
 // Functions for playing/pausing text
 
-function play(){
+function play(e){
+	e.cancelBubble = true;
 	speedReadGlobals.isPlaying = true;
 	toggleVisability('speedread-pause');
 	setTimeout(incrementWord, minsToMillis());
 }
 
-function pause(){
+function pause(e){
+	e.cancelBubble = true;
 	speedReadGlobals.isPlaying = false;
 	toggleVisability('speedread-play');
 }
 
-function replay(){
+function replay(e){
+	e.cancelBubble = true;
 	speedReadGlobals.index = -1;
 	play();
 }
