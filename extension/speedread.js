@@ -35,7 +35,7 @@ function SpeedRead(context){
 		'				background-color: rgba(0, 0, 0, .5);',
 		'				width: 100%;',
 		'				position: fixed;',
-		'				margin: 10% auto;',
+		'				top: 20%;',
 		'				font-family: "Times New Roman" !important;',
 		'				font: normal !important;',
 		'			}',
@@ -73,7 +73,7 @@ function SpeedRead(context){
 		'				text-align: center;',
 		'				cursor: pointer;',
 		'			}',
-		'			.speedread-button{',
+		'			.speedread-button, #speedread-edit-save{',
 		'				display: inline-block;',
 		'				padding: 6px 12px;',
 		'				margin-bottom 0;',
@@ -94,7 +94,7 @@ function SpeedRead(context){
 		'			#speedread-pause, #speedread-replay{',
 		'				display: none;',
 		'			}',
-		'			#speedread-wordcount, #speedread-words-per-minute{',
+		'			#speedread-wordcount, #speedread-words-per-minute, #speedread-edit{',
 		'				display: inline-block;',
 		'			}',
 		'			#speedread-word-rate{',
@@ -103,6 +103,16 @@ function SpeedRead(context){
 		'				text-align: center;',
 		'				margin: 0 auto;',
 		'				font-size: 1.2em;',
+		'			}',
+		'			#speedread-edit{',
+		'				display: none;',
+		'			}',
+		'			#speedread-input-edit{',
+		'				width: 48px;',
+		'			}',
+		'			#speedread-edit-save{',
+		'				height: 24px;',
+		'				line-height: 0px;',
 		'			}',
 		'		</style>',
 		'',
@@ -115,8 +125,13 @@ function SpeedRead(context){
 		'				<button class="speedread-button" id="speedread-replay">Replay</button>',
 		'			</div>',
 		'			<div id="speedread-word-rate">',
-		'				<div id="speedread-wordcount">500</div> words at',
-		'				<div id="speedread-words-per-minute">500</div> words/minute',
+		'				<div id="speedread-wordcount"></div> words at',
+		'				<div id="speedread-words-per-minute"></div>',
+		'				<div id="speedread-edit">',
+		'					<input type="text" id="speedread-input-edit" value="" name="">',
+		'					<button id="speedread-edit-save">Save</button>',
+		'				</div>',
+		'				words/minute',
 		'			</div>',
 		'		</div>',
 		'	</div>',
@@ -126,6 +141,7 @@ function SpeedRead(context){
 	document.getElementsByTagName("body")[0].innerHTML = html + document.getElementsByTagName("body")[0].innerHTML;
 	document.getElementById('speedread-current-word').innerHTML = speedReadGlobals.words[++speedReadGlobals.index];
 	document.getElementById('speedread-wordcount').innerHTML = speedReadGlobals.words.length;
+	document.getElementById('speedread-words-per-minute').innerHTML = speedReadGlobals.wordsPerMinute;
 	Listeners();
 }
 
@@ -137,7 +153,8 @@ function Listeners(){
 	document.getElementById(pauseButtonID).addEventListener("click", pause);
 	document.getElementById(replayButonID).addEventListener("click", replay);
 	document.getElementById('speedread-exit-button').addEventListener("click",  closeSR);
-	document.getElementById('speedread-words-per-minute').onclick = function(){console.log('pewpew');};
+	document.getElementById('speedread-words-per-minute').addEventListener("click", openEdit);
+	document.getElementById('speedread-edit-save').addEventListener('click', saveEdit);
 	document.getElementById('speedread-background').addEventListener("click",  closeSR, false);
 	document.getElementById("speedread-overlay").addEventListener("click", function(e){e.cancelBubble = true;});
 }
@@ -188,8 +205,23 @@ function minsToMillis(){
 
 function closeSR(){
 	var elem = document.getElementById('speedread-background');
+	elem.parentNode.removeChild(elem);
+
 	speedReadGlobals.index = -1;
 	speedReadGlobals.word = null;
 	speedReadGlobals.isPlaying = false;
-	elem.parentNode.removeChild(elem);
+}
+
+function openEdit(e){
+	e.cancelBubble = true;
+	document.getElementById('speedread-edit').style.display = 'inline-block';
+	document.getElementById('speedread-words-per-minute').style.display = 'none';
+}
+
+function saveEdit(e){
+	e.cancelBubble = true;
+	speedReadGlobals.wordsPerMinute = parseInt(document.getElementById('speedread-input-edit').value);
+	document.getElementById('speedread-words-per-minute').innerHTML = speedReadGlobals.wordsPerMinute;
+	document.getElementById('speedread-words-per-minute').style.display =  'inline-block';
+	document.getElementById('speedread-edit').style.display = 'none';
 }
