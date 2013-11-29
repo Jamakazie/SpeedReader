@@ -22,6 +22,10 @@ function SpeedRead(context){
 		'			#speedread-background{',
 		'				width: 100%;',
 		'				height: 100%;',
+		'				position: fixed;',
+		'				z-index: 9000;',
+		'				top: 0;',
+		'				left: 0;',
 		'			}',
 		'			#speedread-overlay{',
 		'				left: 0;',
@@ -135,6 +139,7 @@ function Listeners(){
 	document.getElementById('speedread-exit-button').addEventListener("click",  closeSR);
 	document.getElementById('speedread-words-per-minute').onclick = function(){console.log('pewpew');};
 	document.getElementById('speedread-background').addEventListener("click",  closeSR, false);
+	document.getElementById("speedread-overlay").addEventListener("click", function(e){e.cancelBubble = true;});
 }
 
 // Functions for playing/pausing text
@@ -153,9 +158,8 @@ function pause(e){
 }
 
 function replay(e){
-	e.cancelBubble = true;
 	speedReadGlobals.index = -1;
-	play();
+	play(e);
 }
 
 function toggleVisability(showElement){
@@ -183,7 +187,7 @@ function minsToMillis(){
 }
 
 function closeSR(){
-	var elem = document.getElementById('speedread-overlay');
+	var elem = document.getElementById('speedread-background');
 	speedReadGlobals.index = -1;
 	speedReadGlobals.word = null;
 	speedReadGlobals.isPlaying = false;
