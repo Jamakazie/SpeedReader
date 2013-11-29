@@ -2,10 +2,11 @@ var speedReadGlobals = {
 	index: -1,
 	words: null,
 	isPlaying: false,
-	wordsPerMinute: 700,
+	wordsPerMinute: 500,
 	eventBubble: null
 
 };
+getWPM();
 chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse){
 			if(true){ // I guess we should check if it's actually from it?
@@ -216,12 +217,25 @@ function openEdit(e){
 	e.cancelBubble = true;
 	document.getElementById('speedread-edit').style.display = 'inline-block';
 	document.getElementById('speedread-words-per-minute').style.display = 'none';
+	document.getElementById('speedread-input-edit').focus();
 }
 
 function saveEdit(e){
 	e.cancelBubble = true;
 	speedReadGlobals.wordsPerMinute = parseInt(document.getElementById('speedread-input-edit').value);
+	storeWPM(speedReadGlobals.wordsPerMinute);
 	document.getElementById('speedread-words-per-minute').innerHTML = speedReadGlobals.wordsPerMinute;
 	document.getElementById('speedread-words-per-minute').style.display =  'inline-block';
 	document.getElementById('speedread-edit').style.display = 'none';
+}
+
+function getWPM(){
+	chrome.storage.sync.get("wpm", function(z){
+		z === undefined ? 500 : parseInt(z);
+		speedReadGlobals.wordsPerMinute = z.wpm;
+	});
+}
+
+function storeWPM(words){
+	chrome.storage.sync.set({'wpm': words}, function(){}); 
 }
